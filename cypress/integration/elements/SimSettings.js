@@ -16,7 +16,18 @@ class SimSettings{
     settingRadioDynamic(){
         return ('.simulation-radio-buttons > div > label > span')
     }
-
+    settingSubmenu(){
+        return ('.expanding-submenu.expanded > .radio-group > label > span')
+    }
+    settingLimitValues(){
+        return ('.inspector-panel-content > .simulation-panel > .run-panel > label > input[value="cap-values"]')
+    }
+    settingMinigraphs(){
+        return ('.inspector-panel-content > .simulation-panel > .run-panel > .row > label > input[value="show-mini"]')
+    }
+    settingRelationshipSymbols(){
+        return ('.inspector-panel-content > .simulation-panel > .run-panel > .row > label > input[value="relationship-symbols"]')
+    }
 }
 
 export default SimSettings;
