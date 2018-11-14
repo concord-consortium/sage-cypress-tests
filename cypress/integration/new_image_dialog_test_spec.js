@@ -73,14 +73,16 @@ context('Add New Image modal dialog', function(){
     });
 
     it('will add an image via My Computer', function(){
-        // cy.get('iframe').iframe().then(($iframe)=> {
-        //     cy.wrap($iframe).find(document.addNewImageButton()).click();
-        //     cy.wrap($iframe).find(imageSearch.newImageDialogMenuItem()).contains('My Computer').click();
-        //
-        //     cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
-        //     cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(2)});
-        // });
+        cy.get('iframe').iframe().then(($iframe)=> {
+            cy.wrap($iframe).find(document.addNewImageButton()).click();
+            cy.wrap($iframe).find(imageSearch.newImageDialogMenuItem()).contains('My Computer').click();
+            cy.upload_file('../fixtures/graph.png', imageSearch.newImageMyComputerUpload(), $iframe);
+            cy.wrap($iframe).find(imageSearch.addImageButton()).click();
+            cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
+            cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+        });
     });
+
     it('will add an image via Link', function(){
         cy.get('iframe').iframe().then(($iframe)=> {
             var imageURL='https://codap.concord.org/~eireland/graph.png';
@@ -96,7 +98,7 @@ context('Add New Image modal dialog', function(){
             cy.wrap($iframe).find(imageSearch.addImageButton()).click();
 
             cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
-            cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+            cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(2)});
         });
     });
 });
