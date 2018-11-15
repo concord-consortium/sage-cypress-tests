@@ -66,39 +66,40 @@ context('Add New Image modal dialog', function(){
                         expect(imageResult2).not.to.eq(imageResult1);
                     });
                     cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
-                    cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+                    cy.wrap($iframe).find(document.paletteNode()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(3)});
                 });
             })
         });
-    });
 
-    it('will add an image via My Computer', function(){
-        cy.get('iframe').iframe().then(($iframe)=> {
-            cy.wrap($iframe).find(document.addNewImageButton()).click();
-            cy.wrap($iframe).find(imageSearch.newImageDialogMenuItem()).contains('My Computer').click();
-            cy.upload_file('../fixtures/graph.png', imageSearch.newImageMyComputerUpload(), $iframe);
-            cy.wrap($iframe).find(imageSearch.addImageButton()).click();
-            cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
-            cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+        it('will add an image via My Computer', function(){
+            cy.get('iframe').iframe().then(($iframe)=> {
+                cy.wrap($iframe).find(document.addNewImageButton()).click();
+                cy.wrap($iframe).find(imageSearch.newImageDialogMenuItem()).contains('My Computer').click();
+                cy.upload_file('../fixtures/graph.png', imageSearch.newImageMyComputerUpload(), $iframe);
+                cy.wrap($iframe).find(imageSearch.addImageButton()).click();
+                cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
+                cy.wrap($iframe).find(document.paletteNode()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+            });
+        });
+
+        it('will add an image via Link', function(){
+            cy.get('iframe').iframe().then(($iframe)=> {
+                var imageURL='https://codap.concord.org/~eireland/graph.png';
+                var imageTitle='graph';
+                cy.wrap($iframe).find(document.addNewImageButton()).click();
+                cy.wrap($iframe).find(imageSearch.newImageDialogMenuItem()).contains('Link').click();
+                cy.wrap($iframe).find(imageSearch.newImageURL()).should('be.visible').click().type('https://codap.concord.org/~eireland/graph.png');
+                cy.wrap($iframe).find(imageSearch.newImageLinkPreviewButton()).click();
+
+                cy.wrap($iframe).find(imageSearch.newImageLinkTitleField()).click().type(imageTitle);
+                cy.wrap($iframe).find(imageSearch.newImageLinkLinkField()).should('have.attr', 'value').and('contain', imageURL);
+
+                cy.wrap($iframe).find(imageSearch.addImageButton()).click();
+
+                cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
+                cy.wrap($iframe).find(document.paletteNode()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(2)});
+            });
         });
     });
 
-    it('will add an image via Link', function(){
-        cy.get('iframe').iframe().then(($iframe)=> {
-            var imageURL='https://codap.concord.org/~eireland/graph.png';
-            var imageTitle='graph';
-            cy.wrap($iframe).find(document.addNewImageButton()).click();
-            cy.wrap($iframe).find(imageSearch.newImageDialogMenuItem()).contains('Link').click();
-            cy.wrap($iframe).find(imageSearch.newImageURL()).should('be.visible').click().type('https://codap.concord.org/~eireland/graph.png');
-            cy.wrap($iframe).find(imageSearch.newImageLinkPreviewButton()).click();
-
-            cy.wrap($iframe).find(imageSearch.newImageLinkTitleField()).click().type(imageTitle);
-            cy.wrap($iframe).find(imageSearch.newImageLinkLinkField()).should('have.attr', 'value').and('contain', imageURL);
-
-            cy.wrap($iframe).find(imageSearch.addImageButton()).click();
-
-            cy.wrap($iframe).find(imageSearch.addNewImageDialogCloseIcon()).click();
-            cy.wrap($iframe).find(document.imageNodes()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(2)});
-        });
-    });
 });
