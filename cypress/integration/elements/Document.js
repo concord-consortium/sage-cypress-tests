@@ -1,5 +1,5 @@
-import Document from './Document'
-class SimSettings{
+
+class Document{
 
     // Left Workspace elements
     aboutImagePaletteTab(){
@@ -12,46 +12,17 @@ class SimSettings{
         return ('.palette-delete')
     }
 
-    // New Image Dialog elements
-    addNewImageButton(){
+    addNewImageButton() {
         return ('.palette-add-image')
     }
-    addNewImageDialogTitle(){
-        return ('.modal-dialog-title')
+    paletteNode(){
+        return('div[data-droptype="paletteItem"]')
     }
-    addnewImageDialogCloseIcon(){
-        return ('.modal-dialog-title > .modal-dialog-title-close')
-    }
-    newImageDialogMenuItem(){
-        return ('.tabbed-panel-left.image-browser > .workspace-tabs > ul > li')
-    }
-    newImageSearchDialogTextEntry(){
-        return ('.image-serach-dialog > div > .image-search-dialog-form > form > input[type="text"]')
-    }
-    newImageSearchDialogSearchButton(){
-        return ('.image-serach-dialog > div > .image-search-dialog-form > form > input[type="submit"]')
-    }
-    newImageSearchResults(){
-        return ('.image-search-dialog-results > img')
-    }
-    newImageSearchResultsPaginationPrevious(){
-        return ('.image-search-dialog-pagination > .image-search-prev-next-link')
-    }
-    newImageSearchResultsPaginationNext(){
-        return ('.image-search-dialog-pagination > .image-search-prev-next-link')
-    }
-    newImageSearchPageLink(){
-        return ('.image-search-dialog-pagination > .image-search-page-link')
-    }
-    newImageMyComputerUpload(){
-        return ('.my-computer-dialog > p > input[type="file"]')
-    }
-    newImageURL(){
-        return ('.workspace-tab-component.image-browser > div > .link-dialog > div > p >  input[type="text"]')
-    }
-    newImagePreviewImageButton(){
-        return ('.image-search-dialog > div > .image-search-dialog-form > form > input[type="text"]')
-    }
+    // imageNode(){
+    //     return('.container .ui-droppable .ui-droppable-active .ui-droppable-hover .ui-state-highlight')
+    // }
+
+
 
     // Simulate panel elements
     simulateToggleExpand(){
@@ -143,6 +114,19 @@ class SimSettings{
     nodeRelationshipEffectBylessAndLess(){
         return ('.workspace-tab-component > div > .link-relation-view > div > .top  > div.full > .bb-select > select > option[value="lessAndLess"]')
     }
+
+    canvasArea(){
+        return ('.canvas > .graph-view > .container')
+    }
+    nodeName(){
+        return ('.node-title-box');
+    }
+    nodeNameInput(){
+        return ('input.node-title');
+    }
+    canvasNode(){
+        return('.elm.ui-draggable')
+    }
 }
 
-export default SimSettings;
+export default Document;
