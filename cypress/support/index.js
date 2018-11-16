@@ -20,7 +20,8 @@ import './commands'
 // require('./commands')
 
 before(()=>{
-    cy.visit('https://sage.concord.org/branch/master/sage.html');
+    // cy.visit('https://sage.concord.org/branch/master/sage.html');
+    cy.visit('https://sage.concord.org/');
     // cy.visit('http://127.0.0.1:8080/sage.html');
     cy.wait(2000);
 

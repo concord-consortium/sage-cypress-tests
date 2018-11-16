@@ -5,12 +5,10 @@ const simSettings = new SimSettings;
 
 context('Model Diagram sim setting UI verificaton', function(){
     describe('Models', function(){
-        it('will set up document as a model only', function() {
-            cy.get('iframe').iframe().then(($iframe) => {
-                cy.wrap($iframe).find(document.simSettingsToolButton()).click();
-                cy.wrap($iframe).find(simSettings.settingRadioModel()).contains("Model diagram").siblings('input[type="radio"]').check();
-            })
-        })
+        it.only('will set up document as a model only', function() {
+                cy.getSageIframe().find(document.simSettingsToolButton()).click();
+                cy.getSageIframe().find(simSettings.settingRadioModel()).contains("Model diagram").siblings('input[type="radio"]').check();
+        });
         it('will add nodes to document', function(){
             var nodeName1 = 'Node1',
                 nodeName2 = 'Node2';
