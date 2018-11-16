@@ -1,6 +1,9 @@
 
 class Document{
 
+    canvas(){
+        return('.canvas')
+    }
     // Left Workspace elements
     aboutImagePaletteTab(){
         return ('.top-node-palette-tab')
