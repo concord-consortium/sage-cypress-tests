@@ -118,18 +118,6 @@ class Document{
         return ('.workspace-tab-component > div > .link-relation-view > div > .top  > div.full > .bb-select > select > option[value="lessAndLess"]')
     }
 
-    canvasArea(){
-        return ('.canvas > .graph-view > .container')
-    }
-    nodeName(){
-        return ('.node-title-box');
-    }
-    nodeNameInput(){
-        return ('input.node-title');
-    }
-    canvasNode(){
-        return('.elm.ui-draggable')
-    }
 }
 
 export default Document;

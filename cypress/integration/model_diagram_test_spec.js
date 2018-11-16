@@ -1,42 +1,40 @@
 import Document from './elements/Document'
 import SimSettings from './elements/SimSettings'
+import Diagram from './elements/Diagram'
 const document = new Document;
 const simSettings = new SimSettings;
+const diagram = new Diagram;
+
+function addNode(posX, posY, name){
+    cy.getSageIframe().find(document.paletteNode())
+        .trigger('mousedown',{which: 1});
+    cy.getSageIframe().find(document.canvas())
+        .trigger('mousemove',{pageX:posX, pageY:posY})
+        .trigger('mouseup', {force:true});
+    cy.wait(1000);
+    cy.getSageIframe().find(diagram.nodeName()).click().find(diagram.nodeNameInput({force:true})).last().click({force:true}).type(name, {force:true}).type('{enter}', {force:true});
+    cy.wait(1000);
+};
 
 context('Model Diagram sim setting UI verificaton', function(){
     describe('Models', function(){
         it('will set up document as a model only', function() {
-                cy.getSageIframe().find(document.simSettingsToolButton()).click();
-                cy.getSageIframe().find(simSettings.settingRadioModel()).contains("Model diagram").siblings('input[type="radio"]').check();
+            cy.getSageIframe().find(document.simSettingsToolButton()).click();
+            cy.getSageIframe().find(simSettings.settingRadioModel()).contains("Model diagram").siblings('input[type="radio"]').check();
         });
-        // it.only("lets you drag a node onto canvas", () => {
-        //     cy.getSageIframe().find('.proto-node')
-        //         .trigger('mousedown', { which: 1 })
-        //
-        //     cy.getSageIframe().find('.ui-droppable')
-        //         .trigger('mousemove', { pageX: 200, pageY: 200 })
-        //         .trigger('mouseup', { force: true })
-        //
-        //     cy.getSageIframe().find(".ui-droppable").contains(".elm.ui-draggable", "Untitled")
-        // })
         it('will add nodes to document', function(){
             var nodeName1 = 'Node1',
                 nodeName2 = 'Node2';
-                cy.getSageIframe().find(document.paletteNode())
-                    .trigger('mousedown',{which: 1});
-                cy.getSageIframe().find(document.canvas())
-                    .trigger('mousemove',{pageX:250, pageY:250})
-                    .trigger('mouseup', {force:true});
-                cy.wait(1000);
-                cy.getSageIframe().find(document.nodeName()).click().find(document.nodeNameInput({force:true})).click({force:true}).type(nodeName1, {force:true}).type('{enter}', {force:true});
-                cy.wait(2000);
-                cy.getSageIframe().find(document.paletteNode())
-                    .trigger('mousedown',{which: 1});
-                cy.getSageIframe().find(document.canvas())
-                    .trigger('mousemove', {pageX:450,pageY:250})
-                    .trigger('mouseup', {force:true});
-                cy.wait(1000);
-                cy.getSageIframe().find(document.nodeName()).last().click().find(document.nodeNameInput()).last().click({force:true}).type(nodeName2, {force:true}).type('{enter}',{force:true});
+
+            diagram.addNode(250,250,nodeName1);
+            cy.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(0)});
+            diagram.addNode(450,250,nodeName2);
+            cy.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
         });
+        it('will connect two nodes with a link', function(){
+            diagram.addRelationship();
+            cy.getSageIframe().find(diagram.relationshipArrow()).then(($arrow)=>{ expect($arrow.length).be.greaterThan(0)});
+
+        })
     })
 });
