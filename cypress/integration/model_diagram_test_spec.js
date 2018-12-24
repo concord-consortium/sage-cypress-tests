@@ -5,17 +5,6 @@ const document = new Document;
 const simSettings = new SimSettings;
 const diagram = new Diagram;
 
-function addNode(posX, posY, name){
-    cy.getSageIframe().find(document.paletteNode())
-        .trigger('mousedown',{which: 1});
-    cy.getSageIframe().find(document.canvas())
-        .trigger('mousemove',{pageX:posX, pageY:posY})
-        .trigger('mouseup', {force:true});
-    cy.wait(1000);
-    cy.getSageIframe().find(diagram.nodeName()).click().find(diagram.nodeNameInput({force:true})).last().click({force:true}).type(name, {force:true}).type('{enter}', {force:true});
-    cy.wait(1000);
-};
-
 context('Model Diagram sim setting UI verificaton', function(){
     describe('Models', function(){
         it('will set up document as a model only', function() {
@@ -23,7 +12,7 @@ context('Model Diagram sim setting UI verificaton', function(){
             cy.getSageIframe().find(simSettings.settingRadioModel()).contains("Model diagram").siblings('input[type="radio"]').check();
         });
         it('will add nodes to document', function(){
-            var nodeName1 = 'Node1',
+            let nodeName1 = 'Node1',
                 nodeName2 = 'Node2';
 
             diagram.addNode(250,250,nodeName1);
@@ -34,7 +23,12 @@ context('Model Diagram sim setting UI verificaton', function(){
         it('will connect two nodes with a link', function(){
             diagram.addRelationship();
             cy.getSageIframe().find(diagram.relationshipArrow()).then(($arrow)=>{ expect($arrow.length).be.greaterThan(0)});
-
-        })
+        });
+        it('will verify Simulate toggle is not visible', function(){
+            cy.getSageIframe().find(document.simulateToggleExpand()).then(($toggle)=>{expect($toggle.length).be(0)})
+        });
+        it('will verify Values and Qualitative Relationship buttons are not visible ', function(){
+            cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).be(2)})
+        });
     })
 });
