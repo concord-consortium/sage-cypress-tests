@@ -30,5 +30,5 @@ context('Model Diagram sim setting UI verificaton', function(){
         it('will verify Values and Qualitative Relationship buttons are not visible ', function(){
             cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).be(2)})
         });
-    })
+    });
 });
