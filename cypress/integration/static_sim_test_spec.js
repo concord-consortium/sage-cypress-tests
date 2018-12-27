@@ -36,7 +36,7 @@ context('Static Diagram sim setting tests', function(){
             cy.getSageIframe().find(document.simulateToggleExpand()).then(($toggle)=>{expect($toggle).to.be.visible})
         });
         it('will verify all tool palette buttons are visible ', function(){
-            cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).be(4)})
+            cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).to.equal(4)})
         });
         it('will verify relationship symbols are showing when setting is turned on', function(){
 
