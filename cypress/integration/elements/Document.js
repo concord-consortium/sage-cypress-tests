@@ -56,7 +56,7 @@ class Document{
 
     // Tool palette elements
     toolButtons(){
-        return ('.inspector-panel .tool-panel')
+        return ('.inspector-panel .tool-panel .tool-button')
     }
     styleToolButton(){
         return ('.inspector-panel .tool-panel .icon-codap-styles')

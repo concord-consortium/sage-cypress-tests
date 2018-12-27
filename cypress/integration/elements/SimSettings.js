@@ -20,13 +20,13 @@ class SimSettings{
         return ('.expanding-submenu.expanded > .radio-group > label > span')
     }
     settingLimitValues(){
-        return ('.inspector-panel-content > .simulation-panel > .run-panel > label > input[value="cap-values"]')
+        return ('.inspector-panel-content > .simulation-panel > .run-panel > label > input[value=cap-values]')
     }
     settingMinigraphs(){
-        return ('.inspector-panel-content > .simulation-panel > .run-panel > .row > label > input[value="show-mini"]')
+        return ('.inspector-panel-content > .simulation-panel > .run-panel > .row > label > input[value=show-mini]')
     }
     settingRelationshipSymbols(){
-        return ('.inspector-panel-content > .simulation-panel > .run-panel > .row > label > input[value="relationship-symbols"]')
+        return ('.inspector-panel-content > .simulation-panel > .run-panel > .row > label > input[value=relationship-symbols]')
     }
 }
 
