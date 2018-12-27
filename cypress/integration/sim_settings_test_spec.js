@@ -14,8 +14,8 @@ context('Test sim settings', function(){
                 //verify that tool palette only shows paintbrush
                 cy.wrap($iframe).find(document.styleToolButton()).should('be.visible');
                 cy.wrap($iframe).find(document.simSettingsToolButton()).should('be.visible');
-                cy.wrap($iframe).find(document.valuesToolButton()).should('not.be.visible');
-                cy.wrap($iframe).find(document.qualitativeRelationshipToolButton()).should('not.be.visible');
+                cy.wrap($iframe).get(document.valuesToolButton()).should('not.exist');
+                cy.wrap($iframe).get(document.qualitativeRelationshipToolButton()).should('not.exist');
                 //verify that sim settings only has three listed items visible, and all three are enabled, but only model diagram is checked
                 cy.wrap($iframe).find(simSettings.settingsInspectorPanel()).should('be.visible');
                 cy.wrap($iframe).find(simSettings.settingRadioModel()).contains('Model').should('be.visible');
@@ -24,9 +24,9 @@ context('Test sim settings', function(){
                     cy.wrap($iframe).find(simSettings.settingRadioModel()).contains('Model').siblings('input[type="radio"]').should('be.checked');
                     cy.wrap($iframe).find(simSettings.settingRadioStatic()).contains('Static').siblings('input[type="radio"]').should('not.be.checked');
                     cy.wrap($iframe).find(simSettings.settingRadioDynamic()).contains('Dynamic').siblings('input[type="radio"]').should('not.be.checked');
-                    cy.wrap($iframe).find(simSettings.settingLimitValues()).contains('Limit values').should('not.be.visible');
-                    cy.wrap($iframe).find(simSettings.settingMinigraphs()).contains('mini-graphs').should('not.be.visible');
-                    cy.wrap($iframe).find(simSettings.settingRelationshipSymbols()).contains('relationship symbols').should('not.be.visible');
+                cy.wrap($iframe).get(simSettings.settingLimitValues()).should('not.exist');
+                    cy.wrap($iframe).get(simSettings.settingMinigraphs()).should('not.exist');
+                    cy.wrap($iframe).get(simSettings.settingRelationshipSymbols()).should('not.exist');
                 //clean up
                 cy.wrap($iframe).find(document.simSettingsToolButton()).click();
             })
