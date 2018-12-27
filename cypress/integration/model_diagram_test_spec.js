@@ -25,10 +25,10 @@ context('Model Diagram sim setting UI verificaton', function(){
             cy.getSageIframe().find(diagram.relationshipArrow()).then(($arrow)=>{ expect($arrow.length).be.greaterThan(0)});
         });
         it('will verify Simulate toggle is not visible', function(){
-            cy.getSageIframe().find(document.simulateToggleExpand()).then(($toggle)=>{expect($toggle.length).be(0)})
+            cy.getSageIframe().get(document.simulateToggleExpand()).should('not.exist');
         });
         it('will verify Values and Qualitative Relationship buttons are not visible ', function(){
-            cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).be(2)})
+            cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).to.equal(2)})
         });
     });
 });
