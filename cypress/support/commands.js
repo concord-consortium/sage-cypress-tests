@@ -24,6 +24,10 @@
 // -- This is will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
 
+Cypress.Commands.add("getPluginIframe",()=>{
+    return cy.get(".dg-web-view-frame iframe").iframe()
+});
+
 Cypress.Commands.add("getSageIframe", () => {
     return cy.get(".innerApp iframe").iframe()
 });

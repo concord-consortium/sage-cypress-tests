@@ -16,9 +16,11 @@ context('Model Diagram sim setting UI verificaton', function(){
                 nodeName2 = 'Node2';
 
             diagram.addNode(250,250,nodeName1);
-            cy.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(0)});
+            cy.getSageIframe().find(diagram.node()).then(($nodes)=>{expect($nodes.length).be.greaterThan(0)});
+            cy.getSageIframe().find(diagram.nodeName()).then(($nodename)=>{expect($nodename).to.contain(nodeName1)});
             diagram.addNode(450,250,nodeName2);
             cy.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+            cy.getSageIframe().find(diagram.nodeName()).last().then(($nodename)=>{expect($nodename).to.contain(nodeName2)});
         });
         it('will connect two nodes with a link', function(){
             diagram.addRelationship();

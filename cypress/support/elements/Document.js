@@ -40,8 +40,14 @@ class Document{
     experimentIncrementButton(){
         return ('.experiment-counter > .increment')
     }
-    recordDataButton(){
+    recordDataPointButton(){
         return ('.simulation-run-panel .buttons .vertical .horizontal > .button > .horizontal > .vertical > .horizontal > span')
+    }
+    recordDataStreamButton(){
+        return ('.simulation-run-panel .buttons .vertical .horizontal > .button > .horizontal > .vertical > .horizontal > span')
+    }
+    recordDataButton(){
+        return ('.simulation-run-panel .buttons .vertical .horizontal > .button > .horizontal > .vertical > .horizontal > span').contains('Record')
     }
 
     undoButton(){

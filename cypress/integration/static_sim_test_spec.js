@@ -1,12 +1,12 @@
 import Document from './elements/Document'
 import SimSettings from './elements/SimSettings'
 import Diagram from './elements/Diagram'
-import ModelSettings from './elements/ModelSetting'
+import ValueSettings from './elements/ValueSettings'
 
 const document = new Document;
 const simSettings = new SimSettings;
 const diagram = new Diagram;
-const modelSettings = new ModelSettings;
+const valueSettings = new ValueSettings;
 
 context('Static Diagram sim setting tests', function(){
     describe('Set up a static basic diagram', function(){
@@ -38,19 +38,22 @@ context('Static Diagram sim setting tests', function(){
         it('will verify all tool palette buttons are visible ', function(){
             cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).to.equal(4)})
         });
-        it('will verify relationship symbols are showing when setting is turned on', function(){
-
-        });
-        it('will verfify there are two record buttons, one for 1 data point and one for record data stream', function(){
-
+        it('will verify there are two record buttons, one for 1 data point and one for record data stream', function(){
+            cy.getSageIframe().find(document.simulateToggleExpand()).click();
+            cy.getSageIframe().find(document.recordDataPointButton()).contains('Data Point').should('be.visible');
+            cy.getSageIframe().find(document.recordDataStreamButton()).contains('Data Stream').should('be.visible');
+            cy.getSageIframe().find(document.experimentCounter()).should('be.visible');
         });
     })
     describe('Verify node settings are correct', function(){
         it('will verify nodes cannot be collectors', function(){
-
+            cy.getSageIframe().find(diagram.node()).click();
+            cy.getSageIframe().find(document.valuesToolButton()).click()
+            cy.getSageIframe().find(valueSettings.checkbox).contains('Collector').should('not.exist');
+            cy.getSageIframe().find(valueSettings.checkbox).contains('below zero').should('not.exist');
         });
         it('will verify nodes can be switch to numbers and vice versa', function(){
-
+            
         });
         it('will verify nodes can only have 2 effects - increase and decrease', function(){
 
@@ -64,6 +67,12 @@ context('Static Diagram sim setting tests', function(){
 
         });
         it('will enter reasoning text', function(){
+
+        });
+        it('will verify relationship symbols are showing when setting is turned on', function(){
+            cy.getSageIframe().get(document.simSettingsToolButton()).click();
+            cy.getSageIframe().get(simSettings.settingRelationshipSymbols()).click();
+            cy.getSageIframe().get(simSettings.settingRelationshipSymbols()).should('be.checked');
 
         });
     });
