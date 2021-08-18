@@ -1,5 +1,5 @@
-import SimSettings from "./elements/SimSettings"
-import Document from "./elements/Document"
+import SimSettings from "../support/elements/SimSettings"
+import Document from "../support/elements/Document"
 
 let simSettings = new SimSettings;
 let document = new Document;

@@ -1,5 +1,5 @@
-import Document from './elements/Document'
-import ImageSearch from './elements/ImageSearch'
+import Document from '../support/elements/Document'
+import ImageSearch from '../support/elements/ImageSearch'
 
 const document = new Document;
 const imageSearch = new ImageSearch;
@@ -62,7 +62,7 @@ context('Add New Image modal dialog', function(){
             })
         });
 
-        it('will add an image via My Computer', function(){
+        it.skip('will add an image via My Computer', function(){
                 cy.getSageIframe().find(document.addNewImageButton()).click();
                 cy.getSageIframe().find(imageSearch.newImageDialogMenuItem()).contains('My Computer').click();
                 cy.upload_file('../fixtures/graph.png', imageSearch.newImageMyComputerUpload());
@@ -71,7 +71,7 @@ context('Add New Image modal dialog', function(){
                 cy.getSageIframe().find(document.paletteNode()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
         });
 
-        it('will add an image via Link', function(){
+        it.skip('will add an image via Link', function(){
                 var imageURL='https://codap.concord.org/~eireland/graph.png';
                 var imageTitle='graph';
                 cy.getSageIframe().find(document.addNewImageButton()).click();

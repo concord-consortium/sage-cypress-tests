@@ -1,6 +1,6 @@
-import Document from './elements/Document'
-import SimSettings from './elements/SimSettings'
-import Diagram from './elements/Diagram'
+import Document from '../support/elements/Document'
+import SimSettings from '../support/elements/SimSettings'
+import Diagram from '../support/elements/Diagram'
 const document = new Document;
 const simSettings = new SimSettings;
 const diagram = new Diagram;
