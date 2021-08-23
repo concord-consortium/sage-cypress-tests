@@ -2,6 +2,10 @@ import Document from '../support/elements/Document'
 import SimSettings from '../support/elements/SimSettings'
 import Diagram from '../support/elements/Diagram'
 import ModelSettings from '../support/elements/ModelSetting'
+import * as SageModelerHelper  from '../support/helpers/sageModelerHelper'
+import SageModelerElements  from "../support/elements/sage-modeler-elements";
+import SageModelerSimulationSettingsElements from "../support/elements/sage-modeler-simulation-settings-elements";
+import {sageModelerTestData} from "../support/testdata/sage-modeler-test-data";
 
 const document = new Document;
 const simSettings = new SimSettings;
@@ -11,32 +15,36 @@ const modelSettings = new ModelSettings;
 context('Dynamic Diagram sim setting tests', function(){
     describe('Set up a static basic diagram', function(){
         it('will set up document as a static basic ', function() {
-            cy.getSageIframe().find(document.simSettingsToolButton()).click();
-            cy.getSageIframe().find(simSettings.settingRadioStatic()).contains("Dynamic").siblings('input[type="radio"]').check();
-            cy.getSageIframe().find(simSettings.settingSubmenu()).contains("Basic").siblings('input[type="radio"]').check();
+            SageModelerHelper.updateSimulationModelSettings('dynamic');
+            SageModelerHelper.updateSimulationModelSettings('static');
+            SageModelerHelper.updateSimulationModelSettings('model_diagram');
 
         });
         it('will add nodes to document', function(){
+
+            sageModelerHelper.addNode(250,250, 'Node1');
+            sageModelerHelper.addNode(450,250, 'Node2');
+
             let nodeName1 = 'Node1',
                 nodeName2 = 'Node2';
 
             diagram.addNode(250,250,nodeName1);
-            cy.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(0)});
+            SageModelerHelper.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(0)});
             diagram.addNode(450,250,nodeName2);
-            cy.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
+            SageModelerHelper.getSageIframe().find(diagram.node()).then(($nodes)=>{ expect($nodes.length).be.greaterThan(1)});
         });
         it('will connect two nodes with a link', function(){
             diagram.addRelationship();
-            cy.getSageIframe().find(diagram.relationshipArrow()).then(($arrow)=>{ expect($arrow.length).be.greaterThan(0)});
+            SageModelerHelper.getSageIframe().find(diagram.relationshipArrow()).then(($arrow)=>{ expect($arrow.length).be.greaterThan(0)});
         });
     });
 
     describe('Verify UI is correct', function(){
         it('will verify Simulate toggle is visible', function(){
-            cy.getSageIframe().find(document.simulateToggleExpand()).then(($toggle)=>{expect($toggle).to.be.visible})
+            SageModelerHelper.getSageIframe().find(document.simulateToggleExpand()).then(($toggle)=>{expect($toggle).to.be.visible})
         });
         it('will verify all tool palette buttons are visible ', function(){
-            cy.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).be(4)})
+            SageModelerHelper.getSageIframe().find(document.toolButtons()).then(($button)=>{expect($button.length).be(4)})
         });
         it('will verify relationship symbols are showing when setting is turned on', function(){
 

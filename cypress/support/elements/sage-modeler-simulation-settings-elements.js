@@ -1,5 +1,6 @@
 const SageModelerSimulationSettingsElements = {
 
+    BTN_SIMULATION_SETTINGS: 'div.tool-panel div.tool-button.icon-codap-options',
     PANEL_SIMULATION_SETTINGS: '.inspector-panel .inspector-panel-content .simulation-panel .simulation-radio-buttons',
     RADIO_MODEL_DIAGRAM: '.simulation-panel .simulation-radio-buttons input[type=radio][value=0]',
     RADIO_STATIC_EQUILIBRIUM_SIMULATION: '.simulation-panel .simulation-radio-buttons input[type=radio][value=1]',

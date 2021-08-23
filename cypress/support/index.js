@@ -21,8 +21,8 @@ import './commands'
 
 before(()=>{
     // cy.visit('https://sage.concord.org/branch/master/sage.html');
-    // cy.visit('https://sagemodeler.concord.org/app');
-    cy.visit('https://sagemodeler.concord.org/app/?codap=staging#shared=https://cfm-shared.concord.org/gRFYONX8GmYg9SJ4266K/file.json');
+    cy.visit('https://sagemodeler.concord.org/app');
+    // cy.visit('https://sagemodeler.concord.org/app/?codap=staging#shared=https://cfm-shared.concord.org/gRFYONX8GmYg9SJ4266K/file.json');
     // cy.visit('http://127.0.0.1:8080/sage.html');
     cy.wait(2000);
 

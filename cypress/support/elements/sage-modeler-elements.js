@@ -20,15 +20,21 @@ const SageModelerElements = {
     TAB_NODE_LINK_RELATION: 'div.inspector-panel-content .relation-inspector .tabbed-panel-left ul li',
     TXT_REASON_NODE_LINK_RELATION: ' div.bottom textarea',
 
-    TABLES: '.toolbar-buttons .toolbar i.moonicon-icon-table',
-    LNK_TABLES_SAGE_MODELER_DATA: '.codap-table-menu div.codap-table-menu-item:nth-child(1)',
+    TABLES: '.toolbar i.moonicon-icon-table',
+    BTN_TABLES_SAGE_MODELER_DATA: '.codap-table-menu div.codap-table-menu-item:nth-child(1)',
     BTN_TABLES_NEW_TABLE: '.codap-table-menu div.codap-table-menu-item:nth-child(2) button',
 
-    GRAPH: '.toolbar-buttons .toolbar i.moonicon-icon-graph',
-    TEXT: '.toolbar-buttons .toolbar i.moonicon-icon-comment',
+    TABLE_DEFAULT_SAGE_MODELER_DATA: '#codap div.dg-container-view div.dg-case-table-component-view:nth-child(3)',
+    TABLE_TITLE_BAR_DEFAULT_SAGE_MODELER_DATA: '#codap div.dg-container-view div.dg-case-table-component-view:nth-child(3) .dg-titlebar',
 
-    BTN_SIMULATE: '.simulation-run-panel div.flow[title=simulate] div.toggle-title i',
+    GRAPH: 'i.moonicon-icon-graph',
+    TEXT: 'i.moonicon-icon-comment',
+
+    BTN_SIMULATE: '.simulation-run-panel div.flow[title=Simulate] i',
     BTN_RECORD: 'i.icon-codap-video-camera',
+    BTN_RECORD_1_DATA_POINT: '.simulation-run-panel .horizontal .button i.icon-codap-camera',
+    BTN_LABEL_RECORDING: '.simulation-run-panel .horizontal .button.bigger .horizontal .horizontal span',
+    BTN_RECORD_CONTINUOUSLY: '.simulation-run-panel .horizontal .button.bigger i.icon-codap-video-camera',
 
     COUNTER_EXPERIMENTS: 'div.experiment-counter div.increment',
     INPUT_COUNTER_STEPS: 'div.buttons.flow div.vertical div.horizontal input[type=number]',
@@ -57,6 +63,50 @@ export function getNthImageOnCanvas(nthImage){
 export function getNthImageLinkOnNodeLinkOnCanvas(nthImage, totalNodesOnCanvas){
     let nthChildNodeLink = nthImage + totalNodesOnCanvas;
     return SageModelerElements.CANVAS + ' div.jsplumb-endpoint.node-link-button:nth-child(' + nthChildNodeLink + ')';
+}
+
+export function getNodeSlider(nodeSelector){
+    return nodeSelector + ' .value-slider .value-slider-handle i.icon-codap-smallSliderLines';
+}
+
+export function getExperimentsTableSelector(){
+    return SageModelerElements.TABLE_DEFAULT_SAGE_MODELER_DATA + ' .dg-hier-table-view .sc-split-view .dg-case-table-view:nth-child(3)';
+}
+
+export function getDataTableSelector(){
+    return SageModelerElements.TABLE_DEFAULT_SAGE_MODELER_DATA + ' .dg-hier-table-view .sc-split-view .dg-case-table-view:nth-child(7)';
+}
+
+export function getTableTitleBar(tableSelector){
+    return tableSelector + ' .dg-case-table-title-bar-container .dg-case-table-title'
+}
+
+export function getTableColumnHeader(tableSelector){
+    return tableSelector + ' .slick-header .slick-header-columns';
+}
+
+export function getTableColumnName(tableSelector, colNumber){
+    return getTableColumnHeader(tableSelector) + ' .slick-header-column:nth-child(' + colNumber + ') span.slick-column-name span.two-line-header-line-1';
+}
+
+export function getTableRows(tableSelector){
+    return tableSelector + ' .dg-case-table .grid-canvas';
+}
+
+export function getTableAllRows(tableSelector){
+    return getTableRows(tableSelector) + ' .slick-row';
+}
+
+export function getTableRowDataSelector(tableSelector, rowNumber){
+    return getTableRows(tableSelector) + ' .slick-row:nth-child(' + rowNumber + ')';
+}
+
+export function getTableColumnDataSelector(tableSelector, rowNumber, colNumber){
+    return getTableRowDataSelector(tableSelector, rowNumber) + ' .slick-cell:nth-child(' + colNumber + ') span';
+}
+
+export function getTableColumnProgressBarDataSelector(tableSelector, rowNumber, colNumber){
+    return getTableRowDataSelector(tableSelector, rowNumber) + ' .slick-cell:nth-child(' + colNumber + ') span.dg-qualitative-backing span.dg-qualitative-bar';
 }
 
 export default SageModelerElements;
