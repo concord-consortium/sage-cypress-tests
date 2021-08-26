@@ -4,6 +4,22 @@ const SageModelerImageSearchDialogElements = {
     SEARCH_RESULTS: '.image-search-dialog-results',
     BTN_ADD_IMAGE: '.image-search-dialog .preview-add-image button',
     BTN_CLOSE_DIALOG: 'i.modal-dialog-title-close',
+    BTN_PREVIEW_IMAGE: 'input[value="Preview Image"]',
+
+    TAB_MY_COMPUTER: '.image-browser',
+    FILE_UPLOAD: '.my-computer-dialog > div > p > input[type="file"]'
+}
+
+export function getImageLinkTextBox(sageIframe){
+    return sageIframe.find('.link-dialog').contains('p', 'Image URL');
+}
+
+export function getLinkTabComponent(sageIframe){
+    return sageIframe.find('.workspace-tabs.image-browser ul').contains('li', 'Link');
+}
+
+export function getMyComputerTabComponent(sageIframe){
+    return sageIframe.find('.workspace-tabs.image-browser ul').contains('li', 'My Computer');
 }
 
 export function getNthImage(n){

@@ -1,14 +1,17 @@
 import SageModelerElements from "../elements/sage-modeler-elements";
 import * as SageModelerElementsFunctions from '../elements/sage-modeler-elements';
-import SageModelerImageSearchDialogElements from "../elements/sage-modelere-image-search-dialog-elements";
-import * as SageModelereImageSearchFunctions from "../elements/sage-modelere-image-search-dialog-elements";
+import SageModelerImageSearchDialogElements from "../elements/sage-modeler-image-search-dialog-elements";
+import * as SageModelerImageSearchFunctions from '../elements/sage-modeler-image-search-dialog-elements';
 import SageModelerSimulationSettingsElements from "../elements/sage-modeler-simulation-settings-elements";
+import * as SageModelerSimulationSettingsFunctions from '../elements/sage-modeler-simulation-settings-elements';
+import * as CodapTableElementFunctions from '../elements/codap-table-elements';
+import {getDefaultTableCellComponent} from "../elements/codap-table-elements";
 
 //Sage modeler has two iFrames. This api returns the first iFrame body.
 export const getFirstIframeBody = () => {
     return cy
         .get('div.innerApp iframe')
-        .its('0.contentDocument.body').should('not.be.empty')
+        .its('0.contentDocument.body')
         // wraps "body" DOM element to allow
         // chaining more Cypress commands, like ".find(...)"
         // https://on.cypress.io/wrap
@@ -17,7 +20,7 @@ export const getFirstIframeBody = () => {
 
 export const getSageIframe = () => {
     return getFirstIframeBody().find('.sc-web-view iframe')
-        .its('0.contentDocument.body').should('not.be.empty')
+        .its('0.contentDocument.body')
         .then(cy.wrap);
     
 }
@@ -27,15 +30,35 @@ export function searchForImageAndAdd(searchText, lstItemIndexesToSelect){
     getSageIframe().find(SageModelerImageSearchDialogElements.TXT_SEARCH_FIELD).type(searchText);
     lstItemIndexesToSelect.forEach( nthItemInResult => {
         getSageIframe().find(SageModelerImageSearchDialogElements.BTN_SEARCH).click();
-        getSageIframe().find(SageModelereImageSearchFunctions.getNthImage(nthItemInResult)).click();
+        getSageIframe().find(SageModelerImageSearchFunctions.getNthImage(nthItemInResult)).click();
         getSageIframe().find(SageModelerImageSearchDialogElements.BTN_ADD_IMAGE).click();
 
     });
     getSageIframe().find(SageModelerImageSearchDialogElements.BTN_CLOSE_DIALOG).click();
- }
+}
+
+//This function is still not working because of upload file.
+//After uploading file with automation code, UI is not going to ADD IMAGE button page.
+export function addImageFromMyComputer(imagePath){
+    getSageIframe().find(SageModelerElements.BTN_ADD_NEW_IMAGE).click();
+    SageModelerImageSearchFunctions.getMyComputerTabComponent(getSageIframe()).click();
+    cy.upload_file(getSageIframe(), imagePath, SageModelerImageSearchDialogElements.FILE_UPLOAD);
+    getSageIframe().find(SageModelerImageSearchDialogElements.BTN_ADD_IMAGE).click({force: true});
+    getSageIframe().find(SageModelerImageSearchDialogElements.BTN_CLOSE_DIALOG).click();
+}
+
+export function addImageFromLink(url){
+    getSageIframe().find(SageModelerElements.BTN_ADD_NEW_IMAGE).click();
+    SageModelerImageSearchFunctions.getLinkTabComponent(getSageIframe()).click();
+    SageModelerImageSearchFunctions.getImageLinkTextBox(getSageIframe()).type(url);
+    getSageIframe().find(SageModelerImageSearchDialogElements.BTN_PREVIEW_IMAGE).click();
+    getSageIframe().find(SageModelerImageSearchDialogElements.BTN_ADD_IMAGE).click({force: true});
+    getSageIframe().find(SageModelerImageSearchDialogElements.BTN_CLOSE_DIALOG).click();
+}
+
 
 export function dragImageModelToCanvas(imageModelNumber, posX, posY){
-    getSageIframe().find(SageModelereImageSearchFunctions.getNthImageModel(imageModelNumber)).trigger('mousedown',{which: 1});
+    getSageIframe().find(SageModelerImageSearchFunctions.getNthImageModel(imageModelNumber)).trigger('mousedown',{which: 1});
     getSageIframe().find(SageModelerElements.CANVAS)
         .trigger('mousemove',{pageX:posX, pageY:posY})
         .trigger('mouseup', {force:true});
@@ -58,11 +81,12 @@ export function addTitleToModelNode(imageModelNumber, title){
     getSageIframe().find(SageModelerElements.STYLES_TOOL_PANEL).click();
 }
 
-export function addNodeLink(fromNodeIndex, toNodeIndex){
-    let nodeLinkSelector = SageModelerElementsFunctions.getNthImageLinkOnNodeLinkOnCanvas(fromNodeIndex, 3);
+export function addNodeLink(fromNodeIndex, toNodeIndex, totalNodes){
+    let nodeLinkSelector = SageModelerElementsFunctions.getNthImageLinkOnNodeLinkOnCanvas(fromNodeIndex, totalNodes);
     let toNodeSelector = SageModelerElementsFunctions.getNthImageOnCanvas(toNodeIndex);
-    getSageIframe().find(nodeLinkSelector).trigger('mousedown');
-    getSageIframe().find(toNodeSelector).trigger('mousemove');
+    getSageIframe().find(nodeLinkSelector).click({force: true});
+    getSageIframe().find(nodeLinkSelector).trigger('mousedown', {force: true});
+    getSageIframe().find(toNodeSelector).trigger('mousemove', {force: true});
     getSageIframe().find(toNodeSelector).trigger('mouseup', {force: true});
 
 }
@@ -80,25 +104,22 @@ export function addNodeLinkRelation(nodeIndex, nodeName, relation, byValue, reas
     getSageIframe().find(nodeSelector).click();
     getSageIframe().find(SageModelerElements.NODE_LINK_TOOL_PANEL).click();
     getSageIframe().find(SageModelerElements.TAB_NODE_LINK_RELATION).contains(nodeName).click();
-
-     getSageIframe().find(SageModelerElements.SELECT_NODE_LINK_SOURCE).contains(nodeName).parent().parent().find(SageModelerElements.SELECT_NODE_LINK_RELATION).select(relation);
-    getSageIframe().find(SageModelerElements.SELECT_NODE_LINK_SOURCE).contains(nodeName).parent().parent().find(SageModelerElements.SELECT_NODE_LINK_RELATION_BY_VALUE).select(byValue);
-    getSageIframe().find(SageModelerElements.SELECT_NODE_LINK_SOURCE).contains(nodeName).parent().parent().parent().parent().find(SageModelerElements.TXT_REASON_NODE_LINK_RELATION).type(reasonTxt);
-
-    // getSageIframe().find(SageModelerElements.TXT_REASON_NODE_LINK_RELATION).type(reasonTxt);
+    SageModelerElementsFunctions.getSelectRelationSettingsForNodeLink(getSageIframe(), nodeName, relation).select(relation);
+    SageModelerElementsFunctions.getSelectRelationSettingsForNodeLink(getSageIframe(), nodeName, byValue).select(byValue);
+    SageModelerElementsFunctions.getRelationReasonTextForNodeLink(getSageIframe(), nodeName).type(reasonTxt);
     getSageIframe().find(SageModelerElements.NODE_LINK_TOOL_PANEL).click();
 }
 
 export function addDefaultSagemodelereDataTableToCanvas() {
     getSageIframe().find(SageModelerElements.TABLES).click();
-    getSageIframe().find(SageModelerElements.BTN_TABLES_SAGE_MODELER_DATA).click();
-    getFirstIframeBody().find(SageModelerElements.TABLE_TITLE_BAR_DEFAULT_SAGE_MODELER_DATA).trigger('mousedown');
-    getFirstIframeBody().find(SageModelerElements.TABLE_TITLE_BAR_DEFAULT_SAGE_MODELER_DATA).trigger('mousemove', {
+    CodapTableElementFunctions.getSageModelerDefaultTableMenuItem(getSageIframe()).click();
+    CodapTableElementFunctions.getSageModelDefaultTableHeader(getFirstIframeBody()).trigger('mousedown');
+    CodapTableElementFunctions.getSageModelDefaultTableHeader(getFirstIframeBody()).trigger('mousemove', {
         pageX: 800,
-        pageY: 200
+        pageY: 300
     });
-    cy.wait(2000);
-    getFirstIframeBody().find(SageModelerElements.TABLE_TITLE_BAR_DEFAULT_SAGE_MODELER_DATA).trigger('mouseup', {force: true});
+    cy.wait(500);
+    CodapTableElementFunctions.getSageModelDefaultTableHeader(getFirstIframeBody()).trigger('mouseup', {force: true});
 }
 
 export function simulateOneDataPoint(){
@@ -107,36 +128,62 @@ export function simulateOneDataPoint(){
 }
 
 export function verifySageModelerTableRowSize(rowSize){
-    let tableSelector = SageModelerElementsFunctions.getDataTableSelector();
-    let allRowsSelector = SageModelerElementsFunctions.getTableAllRows(tableSelector);
-    getFirstIframeBody().find(allRowsSelector).should('have.length', rowSize);
+    CodapTableElementFunctions.getDataTable(getFirstIframeBody()).find('div.slick-row').should('have.length', rowSize);
 }
 
 export function verifyTableData(expectedData){
-    let tableSelector = SageModelerElementsFunctions.getDataTableSelector();
-    let colDataSelector;
     for(let row = 0; row < expectedData.length; row++){
-            let indexColSelector = SageModelerElementsFunctions.getTableColumnDataSelector(tableSelector, row+1, 1);
-            getFirstIframeBody().find(indexColSelector).then( ($firstColumn) => {
-                let rowIndex = parseInt($firstColumn.text());
-                cy.log("row Index : " + rowIndex);
-                let expectedRowData = expectedData[rowIndex-1];
-                for(let colIndex = 1; colIndex < expectedRowData.length; colIndex++){
-                    let expectedColData = expectedRowData[colIndex];
-                    if(expectedColData.length === 0){
-                        continue;
-                    }
-                    if(Number.isInteger(expectedColData)){
-                        colDataSelector = SageModelerElementsFunctions.getTableColumnDataSelector(tableSelector, rowIndex, colIndex+1);
-                        getFirstIframeBody().find(colDataSelector).should('have.text', expectedColData.toString());
-                    }else{
-                        colDataSelector = SageModelerElementsFunctions.getTableColumnProgressBarDataSelector(tableSelector, rowIndex, colIndex+1);
-                        getFirstIframeBody().find(colDataSelector).should('have.attr', 'style', expectedColData);
-                    }
-                    cy.wait(1000);
+        CodapTableElementFunctions.getDefaultTableCellComponent(getFirstIframeBody(), row+1, 1).then( ($firstColumn) => {
+            let rowIndex = parseInt($firstColumn.text());
+            cy.log("row Index : " + rowIndex);
+            let expectedRowData = expectedData[rowIndex-1];
+            for(let colIndex = 1; colIndex < expectedRowData.length; colIndex++){
+                let expectedColData = expectedRowData[colIndex];
+                if(expectedColData.length === 0){
+                    continue;
                 }
-            });
+
+                let tableCellComponent = CodapTableElementFunctions.getDefaultTableCellComponent(getFirstIframeBody(), rowIndex, colIndex+1);
+                if(Number.isInteger(expectedColData)){
+                    tableCellComponent.should('have.text', expectedColData.toString())
+                    // colDataSelector = SageModelerElementsFunctions.getTableColumnDataSelector(tableSelector, rowIndex, colIndex+1);
+                    // getFirstIframeBody().find(colDataSelector).should('have.text', expectedColData.toString());
+                }else{
+                    tableCellComponent.find('span.dg-qualitative-bar').should('have.attr', 'style', expectedColData)
+                    // colDataSelector = SageModelerElementsFunctions.getTableColumnProgressBarDataSelector(tableSelector, rowIndex, colIndex+1);
+                    // getFirstIframeBody().find(colDataSelector).should('have.attr', 'style', expectedColData);
+                }
+                cy.wait(100);
+            }
+        });
     }
+
+}
+
+export function updateSimulationModelSettings(simulationType){
+    getSageIframe().find(SageModelerSimulationSettingsElements.BTN_SIMULATION_SETTINGS).click();
+    switch(simulationType){
+        case 'model_diagram':
+            SageModelerSimulationSettingsFunctions.getSimulationTypeRadioButton(getSageIframe(), 'Model diagram').check();
+            break;
+
+        case 'static':
+            SageModelerSimulationSettingsFunctions.getSimulationTypeRadioButton(getSageIframe(), 'Static equilibrium simulation').check();
+            break;
+
+        case 'dynamic':
+            SageModelerSimulationSettingsFunctions.getSimulationTypeRadioButton(getSageIframe(), 'Dynamic time-based simulation').check();
+            break;
+    }
+    getSageIframe().find(SageModelerSimulationSettingsElements.BTN_SIMULATION_SETTINGS).click();
+}
+
+export function selectSimulationTimeSettingsDropDownAndRecord(settings){
+    getSageIframe().find(SageModelerElements.MENU_STEPS).click();
+    SageModelerElementsFunctions.getStepsMenuItems(getSageIframe(), settings).click({force: true});
+    //without sleep the data is not recorded. and we are not able to get the expected number of rows.
+    cy.wait(1000);
+    getSageIframe().find(SageModelerElements.BTN_RECORD).click();
 
 }
 
@@ -162,51 +209,13 @@ export function moveSlider(nodeIndex, slideToNodeIndex){
 
 }
 
-export function updateSimulationModelSettings(simulationType){
-    getSageIframe().find(SageModelerSimulationSettingsElements.BTN_SIMULATION_SETTINGS).click();
-    switch(simulationType){
-        case 'model_diagram':
-            getSageIframe().find(SageModelerSimulationSettingsElements.RADIO_MODEL_DIAGRAM).check();
-            break;
-
-        case 'static':
-            getSageIframe().find(SageModelerSimulationSettingsElements.RADIO_STATIC_EQUILIBRIUM_SIMULATION).check();
-            break;
-
-        case 'dynamic':
-            getSageIframe().find(SageModelerSimulationSettingsElements.RADIO_DYNAMIC_TIMEBASED_SIMULATION).check();
-            break;
-    }
-    getSageIframe().find(SageModelerSimulationSettingsElements.BTN_SIMULATION_SETTINGS).click();
-}
-
-export function selectSimulationTimeSettingsDropDownAndRecord(settings){
-    getSageIframe().find(SageModelerElements.MENU_STEPS).click();
-    switch(settings){
-        case 'steps':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_STEPS).click({force: true});
-            break;
-        case 'seconds':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_SECONDS).click({force: true});
-            break;
-        case 'minutes':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_MINUTES).click({force: true});
-            break;
-        case 'hours':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_HOURS).click({force: true});
-            break;
-        case 'days':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_DAYS).click({force: true});
-            break;
-        case 'weeks':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_WEEKS).click({force: true});
-            break;
-        case 'months':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_MONTHS).click({force: true});
-            break;
-        case 'years':
-            getSageIframe().find(SageModelerElements.MENU_ITEM_YEARS).click({force: true});
-            break;
-    }
-    getSageIframe().find(SageModelerElements.BTN_RECORD).click();
+export function increaseDefaultTableSize( dragPosX, dragPosY){
+    CodapTableElementFunctions.getSageModelDefaultTableHeader(getFirstIframeBody()).click();
+    CodapTableElementFunctions.getDefaultTableResizeHandler(getFirstIframeBody()).trigger('mousedown');
+    CodapTableElementFunctions.getDefaultTableResizeHandler(getFirstIframeBody()).trigger('mousemove', {
+       pageX: dragPosX,
+       pageY: dragPosY
+    });
+    cy.wait(1000);
+    CodapTableElementFunctions.getDefaultTableResizeHandler(getFirstIframeBody()).trigger('mouseup', {force: true});
 }
