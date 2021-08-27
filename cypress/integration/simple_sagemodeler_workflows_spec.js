@@ -179,7 +179,4 @@ context("Sage modeler work flow tests", () => {
         SageModelerHelper.addImageFromMyComputer('../fixtures/graph.png');
         SageModelerHelper.getSageIframe().find(SageModelerElements.IMAGE_PALETTE).should('have.length', 5);
     })
-
-
-
 });

@@ -1,5 +1,3 @@
-import {getFirstIframeBody} from "../helpers/sageModelerHelper";
-
 export function getSageModelerDefaultTableMenuItem(sageIframe){
     return sageIframe.find('.codap-table-menu').contains('.codap-table-menu-item', 'SageModeler Data');
 }
@@ -18,7 +16,6 @@ export function getDefaultTableResizeHandler(iframe){
 
 export function getDataTable(iframe){
     return getSageModelDefaultTableComponent(iframe).contains('.dg-case-table-view', 'Data points');
-    // return SageModelerElements.TABLE_DEFAULT_SAGE_MODELER_DATA + ' .dg-hier-table-view .sc-split-view .dg-case-table-view:nth-child(7)';
 }
 
 export function getDefaultTableCellComponent(iframe, row, col){
