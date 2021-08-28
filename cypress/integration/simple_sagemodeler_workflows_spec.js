@@ -127,7 +127,7 @@ context("Sage modeler work flow tests", () => {
 
 
         //Not Verifying table data after all the continuous recording with the above time selections.
-        //Because the tests are not passing consistently when trying to validate 13 rows of data in the data table.
+        //Because the tests are not passing consistently when trying to validate 20 rows of data in the data table.
         //So, just verifying the row count after all the above operations.
         SageModelerHelper.verifySageModelerTableRowSize(20);
     });
@@ -169,7 +169,6 @@ context("Sage modeler work flow tests", () => {
       });
 
     it("Add Image from using Link options", () => {
-        // SageModelerHelper.addImageFromComputer('../fixtures/graph.png');
         SageModelerHelper.addImageFromLink('https://pixabay.com/get/g034eed4310950a0cd1d94face2539e66095bcaecb4af6178c4e756a388c12f8ed52a1267b0dccb54011d4938380952b018baa57a545a6b84e2520e3f0a9e9bc7_640.png');
         SageModelerHelper.getSageIframe().find(SageModelerElements.IMAGE_PALETTE).should('have.length', 5);
     });
