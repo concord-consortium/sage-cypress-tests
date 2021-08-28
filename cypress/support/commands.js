@@ -113,8 +113,8 @@ function onIframeReady($iframe, successFn, errorFn) {
 //     })
 // });
 
-Cypress.Commands.add('upload_file', (fileName, selector) => {
-    cy.getSageIframe().find(selector)
+Cypress.Commands.add('upload_file', (sageIframe, fileName, selector) => {
+    sageIframe.find(selector)
     // cy.get(selector)
         .then(subject => {
         cy.fixture(fileName, 'base64').then((content) => {
